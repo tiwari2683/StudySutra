@@ -74,8 +74,7 @@ cd ../client
 npm install
 ```
 
-#### (From `client/InstallationInfo.txt`)
-Install all required frontend dependencies:
+### Install all required frontend dependencies:
 ```bash
 npm install react react-dom react-router-dom redux react-redux @reduxjs/toolkit axios
 npm install tailwindcss postcss autoprefixer classnames @headlessui/react @heroicons/react react-hook-form yup react-icons 

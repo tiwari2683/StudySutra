@@ -1,6 +1,0 @@
-move to client folder via terminal.
-install all this for frontend: 
- 
-npm install react react-dom react-router-dom redux react-redux @reduxjs/toolkit axios
-npm install tailwindcss postcss autoprefixer classnames @headlessui/react @heroicons/react react-hook-form yup react-icons 
-npm install chart.js react-chartjs-2 @ramonak/react-progress-bar react-hot-toast jwt-decode
