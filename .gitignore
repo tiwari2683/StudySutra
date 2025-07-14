@@ -1,2 +1,3 @@
 Q&A.txt
-\backend\.env
+backend/.env
+client/.env
