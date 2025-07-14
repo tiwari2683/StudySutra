@@ -1,11 +1,11 @@
-const Profile = require("../Model/Profile");
-const CourseProgress = require("../Model/CourseProgress");
+const Profile = require("../models/Profile");
+const CourseProgress = require("../models/CourseProgress");
 
-const Course = require("../Model/Course");
-const User = require("../Model/User");
-const { uploadImageToCloudinary } = require("../Util/ImageUploader");
+const Course = require("../models/Course");
+const User = require("../models/User");
+const { uploadImageToCloudinary } = require("../utils/ImageUploader");
 const mongoose = require("mongoose");
-const { convertSecondsToDuration } = require("../Util/SecToDuration");
+const { convertSecondsToDuration } = require("../utils/SecToDuration");
 
 exports.updateProfile = async (req, res) => {
   try {
@@ -209,17 +209,18 @@ exports.getEnrolledCourses = async (req, res) => {
 
 exports.instructorDashboard = async (req, res) => {
   try {
+    console.log("InstructorDashboard req.user.id:", req.user?.id);
     const courseDetails = await Course.find({ instructor: req.user.id });
+    console.log("InstructorDashboard courseDetails:", courseDetails);
 
     const courseData = courseDetails.map((course) => {
-      const totalStudentsEnrolled = course.studentsEnroled.length;
-      const totalAmountGenerated = totalStudentsEnrolled * course.price;
+      const totalStudentsEnrolled = Array.isArray(course.studentsEnroled) ? course.studentsEnroled.length : 0;
+      const totalAmountGenerated = totalStudentsEnrolled * (course.price || 0);
 
       const courseDataWithStats = {
         _id: course._id,
         courseName: course.courseName,
         courseDescription: course.courseDescription,
-
         totalStudentsEnrolled,
         totalAmountGenerated,
       };
@@ -230,6 +231,54 @@ exports.instructorDashboard = async (req, res) => {
     res.status(200).json({ courses: courseData });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server Error" });
+    res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
+
+
+/**
+ * ========================================
+ * 👤 User Controller Summary
+ * ========================================
+ *
+ * This controller handles all user-related actions, including
+ * profile management, course tracking, and instructor dashboards.
+ *
+ * 🔹 updateProfile
+ *    - ✏️ Updates basic user info (name) and profile details (DOB, gender, etc.).
+ *    - 🔄 Uses User and Profile models to store data separately.
+ *
+ * 🔹 deleteAccount
+ *    - ❌ Deletes a user, their profile, and related course progress records.
+ *    - 🚫 Also removes the user from `studentsEnroled` array of enrolled courses.
+ *
+ * 🔹 getAllUserDetails
+ *    - 🔍 Returns the full user details, including populated profile info.
+ *    - 🧾 Used for account or settings page display.
+ *
+ * 🔹 updateDisplayPicture
+ *    - 🖼 Uploads a new profile image to Cloudinary.
+ *    - 📤 Updates the user's `image` field with the uploaded image URL.
+ *
+ * 🔹 getEnrolledCourses
+ *    - 📚 Fetches all courses a user is enrolled in.
+ *    - 🕒 Calculates total course durations and progress percentages using `CourseProgress`.
+ *    - 📊 Adds computed fields: `totalDuration` and `progressPercentage` to each course.
+ *
+ * 🔹 instructorDashboard
+ *    - 👨‍🏫 Returns analytics for all courses created by the instructor:
+ *        - Total students enrolled
+ *        - Revenue generated (`students × price`)
+ *
+ * 📌 Utilized Models:
+ *    - `User`, `Profile`, `Course`, `CourseProgress`
+ *
+ * 🧰 Utilities:
+ *    - `uploadImageToCloudinary` – for handling image uploads
+ *    - `convertSecondsToDuration` – to convert total time in seconds to a human-readable format
+ *
+ * ✅ Use Case:
+ *    - Enables profile editing, learning progress tracking, and instructor earnings/statistics.
+ *
+ * ========================================
+ */

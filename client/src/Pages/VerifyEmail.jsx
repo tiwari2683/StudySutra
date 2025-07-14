@@ -19,7 +19,7 @@ function VerifyEmail() {
       navigate("/signup");
     }
 
-  }, []);
+  }, [signupData, navigate]);
 
   const handleVerifyAndSignup = (e) => {
     e.preventDefault();

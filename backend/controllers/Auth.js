@@ -1,10 +1,11 @@
 const bcrypt = require("bcrypt");
-const User = require("../Model/User");
-const OTP = require("../Model/OTP");
+const User = require("../models/User");
+const OTP = require("../models/OTP");
 const jwt = require("jsonwebtoken");
 const otpGenerator = require("otp-generator");
-const mailSender = require("../Util/MailSender");
-const Profile = require("../Model/Profile");
+const mailSender = require("../utils/MailSender");
+const Profile = require("../models/Profile");
+const { passwordUpdated } = require("../Mail/Template/PasswordUpdate");
 require("dotenv").config();
 
 //signup 
@@ -51,7 +52,7 @@ exports.signup = async (req, res) => {
         success: false,
         message: "The OTP is not valid",
       });
-    } else if (otp !== response[0].otp) {
+    } else if (!(await bcrypt.compare(otp, response[0].otp))) {
       return res.status(400).json({
         success: false,
         message: "The OTP is not valid",
@@ -155,7 +156,7 @@ exports.login = async (req, res) => {
   }
 };
 
-exports.sendotp = async (req, res) => {
+exports.sendOTP = async (req, res) => {
   try {
     const { email } = req.body;
 
@@ -202,6 +203,8 @@ exports.changePassword = async (req, res) => {
 
     const { oldPassword, newPassword } = req.body;
 
+    console.log('DEBUG oldPassword:', oldPassword);
+    console.log('DEBUG userDetails.password:', userDetails.password);
     const isPasswordMatch = await bcrypt.compare(
       oldPassword,
       userDetails.password
@@ -250,3 +253,49 @@ exports.changePassword = async (req, res) => {
     });
   }
 };
+
+
+
+/**
+ * ================================
+ * 💼 Auth Controller Summary
+ * ================================
+ * 
+ * This controller handles core user authentication features for the ShikshaSutra backend.
+ * It includes logic for:
+ * 
+ * 🔐 1. User Signup (`exports.signup`)
+ *    - Validates required fields, confirms passwords match.
+ *    - Checks if user already exists.
+ *    - Verifies OTP against the most recent entry.
+ *    - Hashes password and creates new user & profile.
+ * 
+ * 🔐 2. User Login (`exports.login`)
+ *    - Validates login credentials.
+ *    - Compares password with hashed one.
+ *    - Generates JWT token and sets it in HTTP-only cookie.
+ * 
+ * 📤 3. Send OTP (`exports.sendotp`)
+ *    - Checks if user already exists (prevents duplicate OTPs).
+ *    - Generates a 6-digit numeric OTP.
+ *    - Ensures uniqueness and stores OTP in MongoDB.
+ *    - Triggers OTP email via MailSender using OTP model's pre-save hook.
+ * 
+ * 🔁 4. Change Password (`exports.changePassword`)
+ *    - Validates current password before allowing change.
+ *    - Hashes and updates new password.
+ *    - Sends a confirmation email on successful password change.
+ * 
+ * 🔧 Additional Notes:
+ *    - Uses `bcrypt` for password and OTP hashing.
+ *    - Uses `jsonwebtoken` to generate JWT tokens.
+ *    - Uses `otp-generator` to create random OTPs.
+ *    - Sends emails via a custom `mailSender` utility.
+ * 
+ * =====================================
+ * 📁 Related Models Used:
+ *    - User
+ *    - OTP
+ *    - Profile
+ * =====================================
+ */

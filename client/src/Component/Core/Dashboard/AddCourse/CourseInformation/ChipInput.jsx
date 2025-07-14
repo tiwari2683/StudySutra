@@ -27,12 +27,12 @@ export default function ChipInput({
     }
     register(name, { required: true, validate: (value) => value.length > 0 })
 
-  }, [])
+  }, [editCourse, course?.tag, name, register])
 
   useEffect(() => {
     setValue(name, chips)
 
-  }, [chips])
+  }, [chips, name, setValue])
 
 
   const handleKeyDown = (event) => {

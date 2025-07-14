@@ -43,7 +43,7 @@ export default function SubSectionModal({
       setValue("lectureDesc", modalData.description)
       setValue("lectureVideo", modalData.videoUrl)
     }
-  }, [])
+  }, [view, edit, modalData.title, modalData.description, modalData.videoUrl, setValue])
 
   // detect whether form is updated or not
   const isFormUpdated = () => {
@@ -142,14 +142,8 @@ export default function SubSectionModal({
         >
           {/* Lecture Video Upload */}
           <Upload
-            name="lectureVideo"
             label="Lecture Video"
-            register={register}
-            setValue={setValue}
-            errors={errors}
-            video={true}
-            viewData={view ? modalData.videoUrl : null}
-            editData={edit ? modalData.videoUrl : null}
+            onFileSelect={file => setValue('lectureVideo', file)}
           />
           {/* Lecture Title */}
           <div className="flex flex-col space-y-2">
@@ -193,6 +187,7 @@ export default function SubSectionModal({
               <IconBtn
                 disabled={loading}
                 text={loading ? "Loading.." : edit ? "Save Changes" : "Save"}
+                type="submit"
               />
             </div>
           )}

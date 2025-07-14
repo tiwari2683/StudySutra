@@ -26,21 +26,18 @@ function Template({ title, description1, description2, image, formType }) {
             </p>
             {formType === "signup" ? <SignupForm /> : <LoginForm />}
           </div>
-          <div className="relative mx-auto w-11/12 max-w-[450px] md:mx-0">
+          <div className="relative mx-auto w-11/12 max-w-[450px] md:mx-0 flex items-center justify-center">
             <img
               src={frameImg}
               alt="Pattern"
-              width={558}
-              height={504}
+              className="w-full h-auto max-w-[480px] md:max-w-[600px] max-h-[700px] md:max-h-[820px] object-contain"
               loading="lazy"
             />
             <img
               src={image}
               alt="Students"
-              width={558}
-              height={504}
+              className="absolute top-1/2 left-1/2 z-10 w-[95%] h-[95%] max-w-[420px] md:max-w-[540px] max-h-[700px] md:max-h-[820px] object-cover -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-lg"
               loading="lazy"
-              className="absolute -top-4 right-4 z-10"
             />
           </div>
         </div>

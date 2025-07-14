@@ -1,5 +1,5 @@
-const RatingAndReview = require("../Model/RatingAndReview");
-const Course = require("../Model/Course");
+const RatingAndReview = require("../models/RatingAndReview");
+const Course = require("../models/Course");
 const mongoose = require("mongoose");
 
 exports.createRating = async (req, res) => {
@@ -123,3 +123,41 @@ exports.getAllRatingReview = async (req, res) => {
     });
   }
 };
+
+
+/**
+ * ============================================
+ * ⭐ Rating and Review Controller Summary
+ * ============================================
+ *
+ * Handles creation, retrieval, and aggregation of course reviews
+ * and ratings submitted by enrolled students.
+ *
+ * 🔹 createRating
+ *    - ✍️ Allows enrolled students to submit a rating and review for a course.
+ *    - ✅ Prevents duplicate submissions per user per course.
+ *    - 📌 Saves review to `RatingAndReview` collection and updates the course's reference.
+ *
+ * 🔹 getAverageRating
+ *    - 📊 Calculates the average rating of a course using MongoDB aggregation.
+ *    - 🟢 Returns 0 if there are no reviews yet.
+ *
+ * 🔹 getAllRatingReview
+ *    - 🔍 Retrieves all reviews across the platform.
+ *    - 🧾 Populates user (name, email, image) and course (name) details for each review.
+ *    - 🔽 Sorted by rating in descending order.
+ *
+ * 📌 Utilized Models:
+ *    - `RatingAndReview`, `Course`
+ *
+ * 🔒 Permissions & Checks:
+ *    - Users must be enrolled in the course to leave a review.
+ *    - Each user can only review a course once.
+ *
+ * ✅ Use Case:
+ *    - Enables students to share feedback.
+ *    - Helps instructors and admins view course popularity and reception.
+ *    - Supports displaying average ratings and full reviews on course pages.
+ *
+ * ============================================
+ */

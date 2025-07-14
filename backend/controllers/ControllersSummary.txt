@@ -1,0 +1,101 @@
+/**
+ * ============================================================
+ * 🎯 ShikshaSutra Backend - Combined & Complete Controller Summary
+ * ============================================================
+ *
+ * This file summarizes the core logic and responsibilities of
+ * the backend controllers used in the ShikshaSutra EdTech platform.
+ * The backend is structured around modular controllers, each
+ * handling domain-specific operations like authentication,
+ * course management, content structuring, and user reviews.
+ *
+ * ------------------------------------------------------------
+ * 📩 1. 🔐 Password Reset Controller
+ * ------------------------------------------------------------
+ * Handles secure password reset functionality.
+ *
+ * - `resetPasswordToken`
+ *   • Validates the provided email.
+ *   • Generates a secure token and sets an expiry.
+ *   • Sends a reset link to the user's email.
+ *
+ * - `resetPassword`
+ *   • Accepts the reset token and new password.
+ *   • Validates token and expiry.
+ *   • Ensures password and confirm password match.
+ *   • Hashes and updates the new password securely.
+ *
+ * ✨ Security Highlights:
+ *   • Token via `crypto.randomBytes()`
+ *   • Expiration window: 1 hour
+ *   • Password encryption: `bcrypt`
+ *
+ * ------------------------------------------------------------
+ * 📝 2. Rating and Review Controller
+ * ------------------------------------------------------------
+ * Manages user-generated reviews and course ratings.
+ *
+ * - `createRating`
+ *   • Allows enrolled students to rate and review a course.
+ *   • Prevents duplicate reviews.
+ *   • Associates the review with the course and user.
+ *
+ * - `getAverageRating`
+ *   • Calculates average rating of a course using aggregation.
+ *
+ * - `getAllRatingReview`
+ *   • Fetches all ratings and reviews.
+ *   • Populates user and course details for each review.
+ *
+ * ------------------------------------------------------------
+ * 🧩 3. Section Controller
+ * ------------------------------------------------------------
+ * Handles creation, updating, and deletion of course sections.
+ *
+ * - `createSection`
+ *   • Adds a new section to a course.
+ *   • Automatically links the section to the course.
+ *
+ * - `updateSection`
+ *   • Updates section title by `sectionId`.
+ *
+ * - `deleteSection`
+ *   • Unlinks and removes a section from a course.
+ *   • Also deletes all associated subsections.
+ *
+ * ------------------------------------------------------------
+ * 🎬 4. SubSection Controller
+ * ------------------------------------------------------------
+ * Manages video-based submodules (subsections) within a section.
+ *
+ * - `createSubSection`
+ *   • Uploads video using Cloudinary.
+ *   • Creates a new subsection linked to a section.
+ *
+ * - `updateSubSection`
+ *   • Updates subsection's title, description, or video.
+ *   • Updates duration and video URL if video is changed.
+ *
+ * - `deleteSubSection`
+ *   • Removes a subsection and unlinks it from its parent section.
+ *
+ * 🛠 Utilities Used:
+ *   • `uploadImageToCloudinary` for video handling.
+ *
+ * ------------------------------------------------------------
+ * 📚 5. Course, User, and Additional Controllers (Not listed here)
+ * ------------------------------------------------------------
+ * Other modules like Course, User, Category, and Profile controllers
+ * manage core functionality such as user roles, course publishing,
+ * enrollment tracking, and more.
+ *
+ * 🔍 All controllers follow:
+ *   • Clean validation practices
+ *   • MongoDB transactions via Mongoose
+ *   • Consistent JSON responses
+ *   • Use of middleware for auth & role protection (in actual routes)
+ *
+ * ============================================================
+ * ✅ Built With: Node.js, Express, MongoDB, Mongoose, Cloudinary
+ * ============================================================
+ */

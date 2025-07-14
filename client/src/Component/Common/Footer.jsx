@@ -3,7 +3,7 @@ import { FooterLink2 } from "../../data/Footer-Link"
 import { Link } from "react-router-dom";
 
 // Images
-import Logo from "../../Asset/Logo/Logo-Full-Light.png";
+import Logo from "../../Asset/Logo/image.png";
 
 // Icons
 import { FaFacebook, FaGoogle, FaTwitter, FaYoutube } from "react-icons/fa";
@@ -172,7 +172,7 @@ const Footer = () => {
             })}
           </div>
 
-          <div className="text-center">Made By Hindol Roy © 2023 StudyNotion</div>
+          <div className="text-center">Made By Hindol Roy © 2023 ShikshaSutra</div>
         </div>
       </div>
     </div>

@@ -1,10 +1,13 @@
-const Section = require("../Model/Section");
-const SubSection = require("../Model/SubSection");
-const { uploadImageToCloudinary } = require("../Util/ImageUploader");
+const Section = require("../models/Section");
+const SubSection = require("../models/SubSection");
+const { uploadImageToCloudinary } = require("../utils/ImageUploader");
 
 exports.createSubSection = async (req, res) => {
   try {
     const { sectionId, title, description } = req.body;
+    if (!req.files || !req.files.video) {
+      return res.status(400).json({ success: false, message: "No video file uploaded" });
+    }
     const video = req.files.video;
 
     if (!sectionId || !title || !description || !video) {
@@ -133,3 +136,44 @@ exports.deleteSubSection = async (req, res) => {
     });
   }
 };
+
+
+/**
+ * ============================================
+ * 🎬 SubSection Controller Summary
+ * ============================================
+ *
+ * Manages the creation, updating, and deletion of subsections within a section.
+ * Each subsection typically contains a video along with metadata like title,
+ * duration, and description.
+ *
+ * 🔹 createSubSection
+ *    - ➕ Creates a new subsection for a specific section.
+ *    - 📥 Requires `sectionId`, `title`, `description`, and `video` file.
+ *    - ☁️ Uploads video to Cloudinary using `uploadImageToCloudinary`.
+ *    - 🔗 Links the new subsection to its parent section.
+ *    - 🔄 Returns the updated section with populated subsections.
+ *
+ * 🔹 updateSubSection
+ *    - ✏️ Updates a specific subsection's `title`, `description`, or video.
+ *    - ⚙️ Optionally updates the video if a new one is uploaded.
+ *    - 🗂 Updates `videoUrl` and `timeDuration` accordingly.
+ *    - 🔄 Returns the updated parent section with populated subsections.
+ *
+ * 🔹 deleteSubSection
+ *    - ❌ Deletes a subsection from a given section.
+ *    - 🔍 Uses `subSectionId` and `sectionId` to unlink and remove it.
+ *    - 🔄 Returns the updated section after deletion.
+ *
+ * 📌 Key Functional Highlights:
+ *    - Uses `Cloudinary` for video storage and metadata extraction.
+ *    - Populates related `subSection` documents in `Section` for full context.
+ *    - Validates all required fields and gracefully handles missing resources.
+ *
+ * 🧩 Models & Utilities:
+ *    - `Section`: Contains array of `subSection` IDs.
+ *    - `SubSection`: Stores video metadata (URL, duration, etc.).
+ *    - `uploadImageToCloudinary`: Utility to handle file uploads.
+ *
+ * ============================================
+ */

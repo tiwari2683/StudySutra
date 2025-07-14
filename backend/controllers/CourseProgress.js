@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
-const Section = require("../Model/Section");
-const SubSection = require("../Model/SubSection");
-const CourseProgress = require("../Model/CourseProgress");
-const Course = require("../Model/Course");
+const Section = require("../models/Section");
+const SubSection = require("../models/SubSection");
+const CourseProgress = require("../models/CourseProgress");
+const Course = require("../models/Course");
 
 exports.updateCourseProgress = async (req, res) => {
   const { courseId, subsectionId } = req.body;
@@ -43,3 +43,33 @@ exports.updateCourseProgress = async (req, res) => {
     });
   }
 };
+
+
+/**
+ * ========================================
+ * 📈 Course Progress Controller Summary
+ * ========================================
+ *
+ * This controller handles the tracking and updating of a user's
+ * progress through a course by marking completed subsections.
+ *
+ * 🔄 updateCourseProgress (`exports.updateCourseProgress`)
+ *    - 🔢 Input: `courseId`, `subsectionId` (from req.body), `userId` (from req.user)
+ *    - 🧩 Validates that the given subsection exists.
+ *    - 📊 Looks up existing CourseProgress for the user and course.
+ *      - If not found, returns a 404 error.
+ *    - ✅ If the subsection is not already marked as complete:
+ *      - Pushes the subsection ID into `completedVideos` array.
+ *      - Saves the updated CourseProgress document.
+ *    - 🧾 Responds with a success message or appropriate error.
+ *
+ * 📌 Utilized Models:
+ *    - `SubSection` – For validating the subsection exists.
+ *    - `CourseProgress` – To track user's progress in a course.
+ *
+ * ✅ Use Case:
+ *    - Invoked when a user completes a video or content block in a course.
+ *    - Helps in displaying progress bars, completion status, and unlocking new content.
+ *
+ * ========================================
+ */

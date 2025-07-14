@@ -32,7 +32,7 @@ export default function ViewCourse() {
       dispatch(setTotalNoOfLectures(lectures))
     })()
 
-  }, [])
+  }, [courseId, dispatch, token])
 
   return (
     <>

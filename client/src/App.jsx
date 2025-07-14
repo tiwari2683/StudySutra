@@ -44,7 +44,7 @@ function App() {
       dispatch(getUserDetails(token, navigate))
     }
 
-  }, [])
+  }, [dispatch, navigate])
 
   return (
     <div className="flex min-h-screen w-screen flex-col bg-richblack-900 font-inter">

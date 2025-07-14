@@ -74,16 +74,17 @@ function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse }) {
             <button
               className="yellowButton"
               onClick={
-                user && course?.studentsEnroled.includes(user?._id)
+                user && Array.isArray(course?.studentsEnroled) && course?.studentsEnroled.includes(user?._id)
                   ? () => navigate("/dashboard/enrolled-courses")
                   : handleBuyCourse
               }
             >
-              {user && course?.studentsEnroled.includes(user?._id)
+              {user && Array.isArray(course?.studentsEnroled) && course?.studentsEnroled.includes(user?._id)
                 ? "Go To Course"
                 : "Buy Now"}
             </button>
-            {(!user || !course?.studentsEnroled.includes(user?._id)) && (
+            {/* Always render Add to Cart for logged-in users */}
+            {user && (
               <button onClick={handleAddToCart} className="blackButton">
                 Add to Cart
               </button>

@@ -21,7 +21,7 @@ const coursesSchema = new mongoose.Schema({
     type: String,
   },
   courseContent: [
-    {//multiple cection of the course content 
+    {//multiple section of the course content 
       type: mongoose.Schema.Types.ObjectId,
       ref: "Section",
     },
@@ -35,7 +35,7 @@ const coursesSchema = new mongoose.Schema({
   price: {
     type: Number,
   },
-  thumbnail: {
+  thumbnail: { //picture of the course
     type: String,
   },
   tag: {
@@ -47,7 +47,7 @@ const coursesSchema = new mongoose.Schema({
     
     ref: "Category",
   },
-  studentsEnroled: [
+  studentsEnrolled: [
     {
       type: mongoose.Schema.Types.ObjectId,
       required: true,

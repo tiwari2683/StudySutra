@@ -37,14 +37,12 @@ export default function CourseInformationForm() {
       setLoading(true)
       const categories = await fetchCourseCategories()
       if (categories.length > 0) {
-
         setCourseCategories(categories)
       }
       setLoading(false)
     }
 
-    if (editCourse) {
-
+    if (editCourse && course) {
       setValue("courseTitle", course.courseName)
       setValue("courseShortDesc", course.courseDescription)
       setValue("coursePrice", course.price)
@@ -55,9 +53,7 @@ export default function CourseInformationForm() {
       setValue("courseImage", course.thumbnail)
     }
     getCategories()
-
-
-  }, [])
+  }, [editCourse, course?.courseName, course?.courseDescription, course?.price, course?.tag, course?.whatYouWillLearn, course?.category, course?.instructions, course?.thumbnail, setValue])
 
   const isFormUpdated = () => {
     const currentValues = getValues()
@@ -158,7 +154,7 @@ export default function CourseInformationForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-8 rounded-md border-[1px] border-richblack-700 bg-richblack-800 p-6"
+      className="space-y-6 rounded-md border-[1px] border-richblack-700 bg-richblack-800 p-6"
     >
       {/* Course Title */}
       <div className="flex flex-col space-y-2">
@@ -259,12 +255,8 @@ export default function CourseInformationForm() {
       />
       {/* Course Thumbnail Image */}
       <Upload
-        name="courseImage"
         label="Course Thumbnail"
-        register={register}
-        setValue={setValue}
-        errors={errors}
-        editData={editCourse ? course?.thumbnail : null}
+        onFileSelect={file => setValue('courseImage', file)}
       />
       {/* Benefits of the course */}
       <div className="flex flex-col space-y-2">
@@ -306,6 +298,7 @@ export default function CourseInformationForm() {
         <IconBtn
           disabled={loading}
           text={!editCourse ? "Next" : "Save Changes"}
+          type="submit"
         >
           <MdNavigateNext />
         </IconBtn>

@@ -9,8 +9,8 @@ export default function CourseAccordionBar({ course, isActive, handleActive }) {
 
   const [active, setActive] = useState(false)
   useEffect(() => {
-    setActive(isActive?.includes(course._id))
-  }, [isActive])
+    setActive(Array.isArray(isActive) ? isActive.includes(course._id) : false)
+  }, [isActive, course._id])
   const [sectionHeight, setSectionHeight] = useState(0)
   useEffect(() => {
     setSectionHeight(active ? contentEl.current.scrollHeight : 0)
@@ -28,7 +28,7 @@ export default function CourseAccordionBar({ course, isActive, handleActive }) {
           <div className="flex items-center gap-2">
             <i
               className={
-                isActive.includes(course._id) ? "rotate-180" : "rotate-0"
+                Array.isArray(isActive) && isActive.includes(course._id) ? "rotate-180" : "rotate-0"
               }
             >
               <AiOutlineDown />

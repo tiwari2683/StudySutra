@@ -21,7 +21,7 @@ export default function PublishCourse() {
     if (course?.status === COURSE_STATUS.PUBLISHED) {
       setValue("public", true)
     }
-  }, [])
+  }, [course?.status, setValue])
 
   const goBack = () => {
     dispatch(setStep(2))
@@ -65,12 +65,12 @@ export default function PublishCourse() {
 
   return (
     <div className="rounded-md border-[1px] border-richblack-700 bg-richblack-800 p-6">
-      <p className="text-2xl font-semibold text-richblack-5">
+      <p className="text-2xl font-semibold text-richblack-5 mb-4">
         Publish Settings
       </p>
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Checkbox */}
-        <div className="my-6 mb-8">
+        <div className="mb-6">
           <label htmlFor="public" className="inline-flex items-center text-lg">
             <input
               type="checkbox"
@@ -94,7 +94,7 @@ export default function PublishCourse() {
           >
             Back
           </button>
-          <IconBtn disabled={loading} text="Save Changes" />
+          <IconBtn disabled={loading} text="Save Changes" type="submit" />
         </div>
       </form>
     </div>

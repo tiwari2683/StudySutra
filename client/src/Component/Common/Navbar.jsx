@@ -1,4 +1,4 @@
-import logo from "../../Asset/Logo/Logo-Full-Light.png";
+import logo from "../../Asset/Logo/image.png";
 import { NavbarLinks } from "../../data/Navbar-Link";
 import { logout } from "../../Service/Operation/authAPI";
 import { apiConnector } from "../../Service/apiConnector";
@@ -81,11 +81,11 @@ function Navbar() {
                         <div className="absolute left-[50%] top-0 -z-10 h-6 w-6 translate-x-[80%] translate-y-[-40%] rotate-45 select-none rounded bg-richblack-5"></div>
                         {loading || !subLinks ? (
                           <p className="text-center">Loading...</p>
-                        ) : subLinks.length ? (
+                        ) : Array.isArray(subLinks) && subLinks.length ? (
                           <>
                             {subLinks
                               ?.filter(
-                                (subLink) => subLink?.courses?.length > 0
+                                (subLink) => Array.isArray(subLink?.courses) && subLink?.courses.length > 0
                               )
                               ?.map((subLink, i) => (
                                 <Link
@@ -176,7 +176,7 @@ function Navbar() {
                     Log In
                   </div>
                 </Link>
-              )}is 
+              )}
 
               {token === null && (
                 <Link to={"/signup"} onClick={() => setIsMenuModalOpen(false)}>
@@ -262,7 +262,7 @@ function Navbar() {
                   </summary>
 
                   <div className="px-4 text-richblack-100 ">
-                    {subLinks.length ? (
+                    {Array.isArray(subLinks) && subLinks.length ? (
                       <div className="flex flex-col capitalize">
                         {subLinks.map((subLink, index) => (
                           <Link

@@ -1,11 +1,11 @@
-const Course = require("../Model/Course");
-const Category = require("../Model/Category");
-const Section = require("../Model/Section");
-const SubSection = require("../Model/SubSection");
-const User = require("../Model/User");
-const { uploadImageToCloudinary } = require("../Util/ImageUploader");
-const CourseProgress = require("../Model/CourseProgress");
-const { convertSecondsToDuration } = require("../Util/SecToDuration");
+const Course = require("../models/Course");
+const Category = require("../models/Category");
+const Section = require("../models/Section");
+const SubSection = require("../models/SubSection");
+const User = require("../models/User");
+const { uploadImageToCloudinary } = require("../utils/ImageUploader");
+const CourseProgress = require("../models/CourseProgress");
+const { convertSecondsToDuration } = require("../utils/SecToDuration");
 
 exports.createCourse = async (req, res) => {
   try {
@@ -406,3 +406,61 @@ exports.deleteCourse = async (req, res) => {
     });
   }
 };
+
+
+
+
+
+/**
+ * ========================================
+ * 🎓 Course Controller Summary
+ * ========================================
+ *
+ * Handles course-related operations in the application,
+ * including creation, editing, retrieval, and deletion of courses.
+ *
+ * 📌 Dependencies:
+ *    - Models: Course, Category, Section, SubSection, User, CourseProgress
+ *    - Utils: uploadImageToCloudinary (cloud upload), convertSecondsToDuration (duration formatter)
+ *
+ * ========================================
+ * 🔧 Controller Functions
+ * ========================================
+ *
+ * 🆕 createCourse
+ *    - Validates input fields from `req.body` and `req.files`.
+ *    - Uploads thumbnail to Cloudinary.
+ *    - Creates course and links it to instructor and category.
+ *
+ * 🛠️ editCourse
+ *    - Accepts updates to any course fields including tags and instructions.
+ *    - If thumbnail is provided, uploads new one.
+ *    - Saves updated course and returns populated version.
+ *
+ * 📚 getAllCourses
+ *    - Fetches all published courses.
+ *    - Returns select course fields with populated instructor.
+ *
+ * 🔍 getCourseDetails
+ *    - Retrieves full course details (excluding video URLs).
+ *    - Calculates total video duration.
+ *
+ * 🔓 getFullCourseDetails
+ *    - Returns complete course data including video URLs.
+ *    - Includes user-specific progress (completed videos).
+ *
+ * 🎓 getInstructorCourses
+ *    - Lists all courses created by the authenticated instructor.
+ *
+ * ❌ deleteCourse
+ *    - Removes a course along with its sections and sub-sections.
+ *    - Unenrolls all students and cleans up references.
+ *
+ * ========================================
+ * ✅ Use Cases:
+ *    - Course creation and updates by instructors.
+ *    - Course discovery and enrollment by students.
+ *    - Admin operations like deletion and instructor-specific queries.
+ *
+ * ========================================
+ */

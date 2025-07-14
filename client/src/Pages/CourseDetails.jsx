@@ -8,6 +8,7 @@ import Footer from "../Component/Common/Footer"
 import RatingStars from "../Component/Common/RatingStars"
 import CourseAccordionBar from "../Component/Core/Course/CourseAccordionBar"
 import CourseDetailsCard from "../Component/Core/Course/CourseDetailsCard"
+import CourseReviews from "../Component/Core/Course/CourseReviews"
 import { formatDate } from "../Service/formatDate"
 import { fetchCourseDetails } from "../Service/Operation/courseDetailsAPI"
 import { BuyCourse } from "../Service/Operation/studentFeaturesAPI"
@@ -60,7 +61,7 @@ function CourseDetails() {
     setIsActive(
       !isActive.includes(id)
         ? isActive.concat([id])
-        : isActive.filter((e) => e != id)
+        : isActive.filter((e) => e !== id)
     )
   }
 
@@ -158,8 +159,8 @@ function CourseDetails() {
               <div className="text-md flex flex-wrap items-center gap-2 lg:justify-start justify-center">
                 <span className="text-yellow-25">{avgReviewCount}</span>
                 <RatingStars Review_Count={avgReviewCount} Star_Size={24} />
-                <span>{`(${ratingAndReviews.length} reviews)`}</span>
-                <span>{`${studentsEnroled.length} students enrolled`}</span>
+                <span>{`(${Array.isArray(ratingAndReviews) ? ratingAndReviews.length : 0} reviews)`}</span>
+                <span>{`${Array.isArray(studentsEnroled) ? studentsEnroled.length : 0} students enrolled`}</span>
               </div>
               <div>
                 <p className="">
@@ -221,7 +222,7 @@ function CourseDetails() {
               <div className="flex flex-wrap justify-between gap-2">
                 <div className="flex gap-2 tracking-wide">
                   <span>
-                    {courseContent.length} {`section(s)`}
+                    {Array.isArray(courseContent) ? courseContent.length : 0} {`section(s)`}
                   </span>
                   <span>
                     {totalNoOfLectures} {`lecture(s)`}
@@ -241,7 +242,7 @@ function CourseDetails() {
 
             {/* Course Details Accordion */}
             <div className="py-4">
-              {courseContent?.map((course, index) => (
+              {(Array.isArray(courseContent) ? courseContent : []).map((course, index) => (
                 <CourseAccordionBar
                   course={course}
                   key={index}
@@ -270,6 +271,9 @@ function CourseDetails() {
                 {instructor?.additionalDetails?.about}
               </p>
             </div>
+
+            {/* Course Reviews */}
+            <CourseReviews reviews={ratingAndReviews} avgRating={avgReviewCount} />
           </div>
         </div>
       </div>

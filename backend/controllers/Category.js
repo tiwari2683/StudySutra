@@ -1,4 +1,4 @@
-const Category = require("../Model/Category");
+const Category = require("../models/Category");
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
@@ -30,13 +30,10 @@ exports.createCategory = async (req, res) => {
 
 exports.showAllCategories = async (req, res) => {
   try {
-    const allCategories = await Category.find().populate("courses");
-    const categoriesWithPublishedCourses = allCategories.filter((category) =>
-      category.courses.some((course) => course.status === "Published")
-    );
+    const allCategories = await Category.find();
     res.status(200).json({
       success: true,
-      data: categoriesWithPublishedCourses,
+      data: allCategories,
     });
   } catch (error) {
     res.status(500).json({
@@ -114,3 +111,46 @@ exports.categoryPageDetails = async (req, res) => {
     });
   }
 };
+
+
+
+
+/**
+ * =====================================
+ * 📁 Category Controller Summary
+ * =====================================
+ *
+ * This controller handles all operations related to course categories
+ * in the ShikshaSutra backend system.
+ *
+ * ✅ 1. Create Category (`exports.createCategory`)
+ *    - Accepts `name` and `description` via `req.body`.
+ *    - Creates and saves a new Category document in the database.
+ *    - Returns success response upon creation.
+ *
+ * 📦 2. Show All Categories (`exports.showAllCategories`)
+ *    - Fetches all categories and populates their associated courses.
+ *    - Filters out categories that have no "Published" courses.
+ *    - Returns only those categories that have at least one published course.
+ *
+ * 📄 3. Category Page Details (`exports.categoryPageDetails`)
+ *    - Input: `categoryId` from request body.
+ *    - Fetches the selected category with its published courses.
+ *    - If no courses are available in that category, informs the user.
+ *    - Also fetches:
+ *      - A different (random) category with published courses.
+ *      - Top 10 best-selling courses across all categories.
+ *    - Returns all of the above in a structured response:
+ *      - `selectedCategory`
+ *      - `differentCategory`
+ *      - `mostSellingCourses`
+ *
+ * 🔧 Utility Used:
+ *    - `getRandomInt(max)` — selects a random category for discovery.
+ *
+ * 📌 Models Used:
+ *    - Category (with populated `courses` field)
+ *    - Courses (accessed via Category)
+ *
+ * =====================================
+ */

@@ -19,11 +19,11 @@ export default function RequirementsField({
     }
     register(name, { required: true, validate: (value) => value.length > 0 })
 
-  }, [])
+  }, [editCourse, course?.instructions, name, register])
   useEffect(() => {
     setValue(name, requirementsList)
 
-  }, [requirementsList])
+  }, [requirementsList, name, setValue])
 
   const handleAddRequirement = () => {
     if (requirement) {

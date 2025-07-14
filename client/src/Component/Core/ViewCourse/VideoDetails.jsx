@@ -47,7 +47,7 @@ const VideoDetails = () => {
         setVideoEnded(false)
       }
     })()
-  }, [courseSectionData, courseEntireData, location.pathname])
+  }, [courseSectionData, courseEntireData, location.pathname, courseId, navigate, sectionId, subSectionId])
 
 
   const isFirstVideo = () => {

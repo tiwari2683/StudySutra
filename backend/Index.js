@@ -3,19 +3,19 @@ const express = require("express");
 const app = express(); // Initialize Express app
 
 // Import route handlers
-const userRoutes = require("./Route/User");
-const profileRoutes = require("./Route/Profile");
-const courseRoutes = require("./Route/Course");
-const paymentRoutes = require("./Route/Payment");
-const contactUsRoute = require("./Route/Contact");
+const userRoutes = require("./routes/User");
+const profileRoutes = require("./routes/Profile");
+const courseRoutes = require("./routes/course");
+const paymentRoutes = require("./routes/Payment");
+const contactUsRoute = require("./routes/Contact");
 
 // Import database configuration
-const database = require("./Configuration/Database");
+const database = require("./config/database");
 
 // Import middleware packages
 const cookieParser = require("cookie-parser");
-const cors = require("cors");
-const { cloudinaryConnect } = require("./Configuration/Cloudinary");
+const cors = require("cors"); //this type of import is used to bring in the entire module, which can contain multiple exports  at last of all the fn  module.exports = {abc,bcd,edf}
+const { cloudinaryConnect } = require("./config/Cloudinary");  //this type of import is used to bring single exported function from a module . exports.cloudinaryConnect = () => { ... }
 const fileUpload = require("express-fileupload");
 
 // Load environment variables from .env file
@@ -62,7 +62,7 @@ app.use("/api/v1/reach", contactUsRoute); // Contact Us form routes
 app.get("/", (req, res) => {
   return res.json({
     success: true,
-    message: "Welcome To StudyNotion",
+    message: "Welcome To ShikshaSutra",
   });
 });
 

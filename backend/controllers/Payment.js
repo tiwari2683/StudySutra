@@ -1,19 +1,19 @@
-const { instance } = require("../Configuration/Razorpay");
-const Course = require("../Model/Course");
+const { instance } = require("../config/Razorpay");
+const Course = require("../models/Course");
 const crypto = require("crypto");
-const User = require("../Model/User");
-const mailSender = require("../Util/MailSender");
+const User = require("../models/User");
+const mailSender = require("../utils/MailSender");
 const mongoose = require("mongoose");
 const {
   courseEnrollmentEmail,
 } = require("../Mail/Template/CourseEnrollmentEmail");
 const { paymentSuccessEmail } = require("../Mail/Template/PaymentSuccessEmail");
-const CourseProgress = require("../Model/CourseProgress");
+const CourseProgress = require("../models/CourseProgress");
 
 exports.capturePayment = async (req, res) => {
   const { courses } = req.body;
   const userId = req.user.id;
-  if (!courses.length) {
+  if (!courses || !courses.length) {
     return res.json({ success: false, message: "Please Provide Course ID" });
   }
   let total_amount = 0;
@@ -21,16 +21,25 @@ exports.capturePayment = async (req, res) => {
     let course;
     try {
       course = await Course.findById(course_id);
+      console.log("Course:", course);
       if (!course) {
         return res
           .status(200)
           .json({ success: false, message: "Could not find the Course" });
       }
+      if (!Array.isArray(course.studentsEnroled)) {
+        course.studentsEnroled = [];
+      }
       const uid = new mongoose.Types.ObjectId(userId);
+      console.log("studentsEnroled:", course.studentsEnroled);
+      console.log("uid:", uid);
       if (course.studentsEnroled.includes(uid)) {
         return res
           .status(200)
           .json({ success: false, message: "Student is already Enrolled" });
+      }
+      if (typeof course.price !== 'number') {
+        return res.status(500).json({ success: false, message: "Course price is invalid" });
       }
       total_amount += course.price;
     } catch (error) {
@@ -54,7 +63,7 @@ exports.capturePayment = async (req, res) => {
     console.log(error);
     res
       .status(500)
-      .json({ success: false, message: "Could not initiate order." });
+      .json({ success: false, message: "Could not initiate order.", error: error.message });
   }
 };
 
@@ -177,3 +186,49 @@ const enrollStudents = async (courses, userId, res) => {
     }
   }
 };
+
+
+/**
+ * ========================================
+ * 💳 Payment Controller Summary
+ * ========================================
+ *
+ * This controller manages the full payment and enrollment flow
+ * for purchasing courses using Razorpay.
+ *
+ * 🔹 capturePayment (`exports.capturePayment`)
+ *    - 🧾 Validates provided course IDs and checks if the user is already enrolled.
+ *    - 🧮 Calculates the total price of selected courses.
+ *    - 📦 Initiates a Razorpay order with the total amount.
+ *    - 🛑 Responds with order details or errors if order creation fails.
+ *
+ * 🔹 verifyPayment (`exports.verifyPayment`)
+ *    - 🔒 Verifies the Razorpay signature to ensure payment authenticity.
+ *    - 📚 If valid, calls `enrollStudents()` to add the user to selected courses.
+ *    - ✅ Responds with success or failure message.
+ *
+ * 🔹 sendPaymentSuccessEmail (`exports.sendPaymentSuccessEmail`)
+ *    - 📧 Sends a payment receipt confirmation email after successful payment.
+ *    - 📝 Uses a custom HTML email template for payment summary.
+ *
+ * 🔹 enrollStudents (Internal Function)
+ *    - 🎓 Enrolls a user in one or more courses.
+ *    - 👥 Updates:
+ *        - `Course`: Adds user to `studentsEnroled` list.
+ *        - `User`: Adds course ID and a new `CourseProgress` document.
+ *    - 📤 Sends a course enrollment confirmation email to the user.
+ *
+ * 📌 Utilized Models:
+ *    - `Course`, `User`, `CourseProgress`
+ *
+ * 🧰 Utilities:
+ *    - Razorpay instance for payment initiation.
+ *    - Node `crypto` for HMAC signature validation.
+ *    - `mailSender` with templates: `courseEnrollmentEmail`, `paymentSuccessEmail`
+ *
+ * ✅ Use Case:
+ *    - Called when a student initiates payment for course(s).
+ *    - Ensures secure payment, updates course/user states, and sends notifications.
+ *
+ * ========================================
+ */

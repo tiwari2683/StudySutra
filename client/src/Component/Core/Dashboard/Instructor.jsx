@@ -27,7 +27,7 @@ export default function Instructor() {
       }
       setLoading(false)
     })()
-  }, [])
+  }, [token])
 
   const totalAmount = instructorData?.reduce(
     (acc, curr) => acc + curr.totalAmountGenerated,
@@ -54,7 +54,7 @@ export default function Instructor() {
                 <Spinner />
               </div>
             )
-            : !instructorData || !courses.length ?
+            : !instructorData || !Array.isArray(courses) || !courses.length ?
               (
                 <div className='text-center mt-20 bg-richblack-800 px-6  py-20 rounded-md' >
                   <p className='text-2xl font-bold text-richblack-5' >You have <span className='font-extrabold text-pink-50'>not</span> published any courses yet</p>
@@ -94,7 +94,7 @@ export default function Instructor() {
                       <div className='flex flex-col gap-4 mt-4 mb-4' >
                         <div>
                           <p className='text-lg text-richblack-200' >Total Courses</p>
-                          <p className='text-3xl font-semibold text-richblack-50' >{courses.length}</p>
+                          <p className='text-3xl font-semibold text-richblack-50' >{Array.isArray(courses) ? courses.length : 0}</p>
                         </div>
 
                         <div>
@@ -123,7 +123,7 @@ export default function Instructor() {
 
                     <div className='flex flex-col md:flex-row gap-x-5 gap-y-7 my-4' >
                       {
-                        courses.slice(0, 3).map((course, ind) => (
+                        (Array.isArray(courses) ? courses : []).slice(0, 3).map((course, ind) => (
                           <div key={ind} className='w-full md:w-1/3' >
                             <img
                               src={course.thumbnail}
@@ -133,7 +133,7 @@ export default function Instructor() {
 
                             <p className='mt-3 text-sm font-medium text-richblack-50' > {course.courseName} </p>
 
-                            <p className='mt-1 text-xs font-medium text-richblack-300' >{course.studentsEnroled.length} students | ₹ {course.price}</p>
+                            <p className='mt-1 text-xs font-medium text-richblack-300' >{Array.isArray(course.studentsEnroled) ? course.studentsEnroled.length : 0} students | ₹ {course.price}</p>
                           </div>
                         ))
                       }

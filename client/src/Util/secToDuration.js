@@ -15,7 +15,7 @@ function convertSecondsToDuration(totalSeconds) {
     }
   }
   
-module.exports = {
+export {
     convertSecondsToDuration,
 }
   
