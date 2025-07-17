@@ -2,3 +2,37 @@ Q&A.txt
 backend/.env
 client/.env
 client/InstallationInfo.txt
+
+# Node.js (backend)
+backend/node_modules/
+backend/.env
+backend/dist/
+backend/build/
+backend/*.log
+backend/npm-debug.log*
+
+# React (frontend)
+client/node_modules/
+client/.env
+client/build/
+client/.next/   # If using Next.js
+client/dist/
+
+# OS / Editor-specific
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Misc
+*.env.local
+*.env.development.local
+*.env.test.local
+*.env.production.local
+
+# MongoDB dump/output folders
+dump/
+data/
